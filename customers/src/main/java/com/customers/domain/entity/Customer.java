@@ -12,7 +12,6 @@ import lombok.*;
 @Table(name="customers")
 @Getter
 @Setter
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer {
