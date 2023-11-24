@@ -2,6 +2,7 @@ package com.customers.presentation.controller;
 
 import java.util.List;
 
+import com.customers.domain.dto.CustomerCreateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.customers.bussines.service.ICustomerService;
 import com.customers.domain.dto.CustomerDto;
-import com.customers.domain.entity.Customer;
 
 @RestController
 @RequestMapping("api/customer")
 public class CustomerController {
 
 	@Autowired
-	private ICustomerService customerService;
+	ICustomerService customerService;
 	
 	@GetMapping
 	public ResponseEntity<List<CustomerDto>> getAllCustomer(){
@@ -32,21 +32,18 @@ public class CustomerController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-		Customer response = customerService.addCustomer(customer);
-		return new ResponseEntity<Customer>(response,HttpStatus.OK);
+	public ResponseEntity<CustomerCreateDto> createCustomer(@RequestBody CustomerCreateDto customer) {
+		return new ResponseEntity<>(customerService.addCustomer(customer),HttpStatus.OK);
 	}
 	
 	@PutMapping("{customerId}")
-	public ResponseEntity<Customer >modifyCustomer(@PathVariable("customerId") int id,@RequestBody Customer customer) {
-		Customer response = customerService.updateCustomers(id, customer);
-		return new ResponseEntity<Customer>(response,HttpStatus.OK);
+	public ResponseEntity<CustomerCreateDto> modifyCustomer(@PathVariable("customerId") int id,@RequestBody CustomerCreateDto customer) {
+		return new ResponseEntity<CustomerCreateDto>(customerService.updateCustomers(id,customer), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("{customerId}")
-	public ResponseEntity<Customer> deleteCustomer(@PathVariable("customerId") int id) {
-		Customer response = customerService.delete(id);
-		return new ResponseEntity<>(response,HttpStatus.NO_CONTENT);
+	public ResponseEntity<CustomerCreateDto> deleteCustomer (@PathVariable("customerId") int id) {
+		return new ResponseEntity<>(customerService.delete(id),HttpStatus.FORBIDDEN);
 	}
 	
 }

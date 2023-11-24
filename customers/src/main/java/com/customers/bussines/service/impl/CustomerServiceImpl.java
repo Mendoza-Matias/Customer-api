@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.customers.domain.dto.CustomerCreateDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,42 +27,73 @@ public class CustomerServiceImpl implements ICustomerService {
 	}
 
 	@Override
-	public Customer addCustomer(Customer customer) {
-		Customer newCustomer = repository.save(customer);
+	public CustomerCreateDto addCustomer (CustomerCreateDto customer) {
 
-		return newCustomer;
+		Customer customerEntity = new Customer();
+		customerEntity.setName(customer.getName());
+		customerEntity.setLastName(customer.getLastName());
+		customerEntity.setAge(customer.getAge());
+		customerEntity.setTel(customer.getTel());
+
+		repository.save(customerEntity);
+
+		CustomerCreateDto customerCreateDto = new CustomerCreateDto();
+		customerCreateDto.setName(customer.getName());
+		customerCreateDto.setLastName(customer.getLastName());
+		customerCreateDto.setTel(customer.getTel());
+		customerCreateDto.setAge(customer.getAge());
+
+		return customerCreateDto;
 	}
 
 	@Override
-	public Customer updateCustomers(int id, Customer customer) {
+	public CustomerCreateDto updateCustomers(int id, CustomerCreateDto customer) {
 
-		Customer customerModify = null;
+		Customer customerExist = null;
 
 		if (repository.findById(id).isPresent()) {
 
-			customerModify = repository.findById(id).get();
+			customerExist = repository.findById(id).get();
 
-			customerModify.setName(customer.getName());
-			customerModify.setLastName(customer.getLastName());
-			customerModify.setAge(customer.getAge());
-			customerModify.setTel(customer.getTel());
+			customerExist.setName(customer.getName());
+			customerExist.setLastName(customer.getLastName());
+			customerExist.setAge(customer.getAge());
+			customerExist.setTel(customer.getTel());
 
 			/* modification of the customer */
 
-			repository.save(customerModify);
+			repository.save(customerExist);
+
 		}
 
-		return customerModify;
+		CustomerCreateDto customerCreateDto = new CustomerCreateDto();
+		customerCreateDto.setName(customer.getName());
+		customerCreateDto.setLastName(customer.getLastName());
+		customerCreateDto.setTel(customer.getTel());
+		customerCreateDto.setAge(customer.getAge());
+
+		return customerCreateDto;
 	}
 
 	@Override
-	public Customer delete(int id) {
-		Optional<Customer> customer = repository.findById(id);
+	public CustomerCreateDto delete (int id) {
+
+		Optional <Customer> customer = repository.findById(id);
 
 		if (customer.isPresent()) {
-			Customer customerToDelete = customer.get();
+
+			CustomerCreateDto customerData = new CustomerCreateDto();
+			Customer customerExist = customer.get();
+
+			customerData.setName(customerExist.getName());
+			customerData.setLastName(customerExist.getLastName());
+			customerData.setTel(customerExist.getTel());
+			customerData.setAge(customerData.getAge());
+
 			repository.deleteById(id);
-			return customerToDelete;
+
+			return customerData;
+
 		} else {
 			return null;
 		}

@@ -9,11 +9,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDto{
+public class CustomerCreateDto {
 
-	private Integer id;
-	private String name;
-	private String lastName;
+    private String name;
 
-	
+    private String lastName;
+
+    private int age;
+
+    private int tel;
 }
